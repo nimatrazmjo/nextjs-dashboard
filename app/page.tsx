@@ -3,11 +3,9 @@ import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { sql } from '@vercel/postgres';
 import Link from 'next/link';
 
-console.log({POSTGRES_URL: process.env.POSTGRES_URL, POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING}, "process.env.POSTGRES_URL_NON_POOLING");
-
 export default async function Page({params}: {params: {user: string}}) {
 
-  const { rows }= await sql`SELECT * FROM users WHERE username = ${params.user}`;
+  const { rows }= await sql`SELECT * FROM users`;
   return (
     <main className="flex min-h-screen flex-col p-6">
       <h1 className="text-3xl font-bold">Welcome to Acme!</h1>
@@ -18,12 +16,12 @@ export default async function Page({params}: {params: {user: string}}) {
         <div className="flex flex-col mt-6">
           <h2 className="text-xl font-bold">Users</h2>
           <ul className="flex flex-col mt-2">
+            {rows.length}
             {rows.map((row) => (
               <li key={row.id} className="flex items-center">
                 <Link href={`/user/${row.username}`}>
-                  <a className="text-blue-500 hover:underline">{row.username}</a>
+                  {row.username}
                 </Link>
-                <ArrowRightIcon className="w-4 h-4 text-gray-500" />
               </li>
             ))}
           </ul>
